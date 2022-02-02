@@ -13,3 +13,5 @@ npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
 ```
+
+помимо этого добавил возможность запускать тесты при помощи WebStorm & Mocha, что должно быть гораздо удобнее консоли
