@@ -7,7 +7,7 @@ contract NFT_ERC721 is ERC721 {
     using Strings for uint256;
 
     uint256 tokenOffset = 1; // due to transaction might fail lets start with 1
-    uint256 constant maxCollectionSize = 100;
+    uint256 constant maxCollectionSize = 2;
     string baseUrl;
 
     string extension = ".png";
@@ -17,7 +17,7 @@ contract NFT_ERC721 is ERC721 {
     }
 
     function mint() public {
-        require(tokenOffset <= 100, "Collection already minted");
+        require(tokenOffset <= maxCollectionSize, "Collection already minted");
         ERC721._safeMint(msg.sender, tokenOffset); // because transaction may fail
         tokenOffset++;
     }

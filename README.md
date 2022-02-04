@@ -1,6 +1,7 @@
 # Basic Sample Hardhat Project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample
+script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
 
 Try running some of the following tasks:
 
@@ -18,3 +19,9 @@ npx hardhat help
 
 https://github.com/benyaminahmed/nft-image-generator/blob/main/generate.ipynb -- генератор взял отсюда
 https://github.com/bodasooqa/freaky-goblins-nft/blob/master/deploy/deploy-goblin.js -- деплой отсюда
+
+deploy
+
+```shell
+npx hardhat run --network mumbai deploy/deploy.js
+```
