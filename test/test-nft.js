@@ -22,10 +22,10 @@ describe("NFT", function () {
         expect(await nft.tokenURI(1)).to.equal(base_url + "1.png");
     });
 
-    it("mint first 2", async function () {
+    it("mint first 840", async function () {
         const [owner, addr1, ...addrs] = await ethers.getSigners();
         nft = nft.connect(addr1);
-        for (let i = 1; i <= 2; i++) {
+        for (let i = 1; i <= 840; i++) {
             await nft.mint();
         }
         await expect(nft.mint()).to.be.revertedWith("Collection already minted");

@@ -7,7 +7,7 @@ contract NFT_ERC721 is ERC721 {
     using Strings for uint256;
 
     uint256 tokenOffset = 1; // due to transaction might fail lets start with 1
-    uint256 constant maxCollectionSize = 2;
+    uint256 constant maxCollectionSize = 840;
     string baseUrl;
 
     string extension = ".png";
