@@ -10,7 +10,7 @@ async function deployNft() {
     }
     const owner = accounts[0];
     console.log("=================================");
-    const nftContract = (await hre.ethers.getContractFactory("NFT_ERC721")).connect(owner);
+    const nftContract = (await hre.ethers.getContractFactory("RabbitsCollection")).connect(owner);
     const nftDeployed = await nftContract.deploy(this.config.nftDirPath);
     console.log("nft contract address: " + nftDeployed.address);
     console.log("owner balance: " + await provider.getBalance(await owner.getAddress()));

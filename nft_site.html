@@ -184,6 +184,25 @@
             "type": "function"
         },
         {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_address",
+                    "type": "address"
+                }
+            ],
+            "name": "mintedForUser",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "",
+                    "type": "uint256[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
             "inputs": [],
             "name": "name",
             "outputs": [
@@ -359,7 +378,7 @@
             "type": "function"
         }
     ];
-    const contractAddress = "0x7859664111De1E9d818347f772e07e970C8D8A9c";
+    const contractAddress = "0xB10031E3F58c52fe7A56E028Aa421D986Ff03eeD";
     var contract;
     var provider;
     var signer;
@@ -404,19 +423,17 @@
 
     function loadCollection() {
         signer.getAddress().then((currAddr) => {
-            for (let i = 0; i <= 10; i++) {
-                contract.ownerOf(i).then((addr) => {
-                    if (currAddr !== addr) {
-                        return;
-                    }
-                    contract.tokenURI(i).then((uri) => {
+            contract.mintedForUser(currAddr).then((mintedTokens) => {
+                for (let idx of mintedTokens) {
+                    contract.tokenURI(idx.toNumber()).then((uri) => {
                         let img = document.createElement("img");
                         img.src = uri;
                         document.getElementById("minted-images").append(img);
                     });
-                }).catch(() => {
-                });
-            }
+                }
+            }).catch(() => {
+            });
+
         });
     }
 
