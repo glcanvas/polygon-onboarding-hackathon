@@ -26,16 +26,15 @@ contract Tasks is Token, AccessControl {
         allTasks.push(Task(_name, prizerForDone, false));
     }
 
-    function taskDone(address performer) external {
+    function taskDone(address performer, uint32 _taskId) external {
         // our id blind with structs our Task
-        uint8 id = uint8(allTasks.length) - 1;
         require(
-            userDone[msg.sender][id] == false,
+            userDone[msg.sender][_taskId] == false,
             "You're done with this task!"
         );
         // turn into true which mean, that his done with this task
-        userDone[msg.sender][id] = true;
-        uint32 prize = uint32(tasks[id].prizerForDone);
+        userDone[msg.sender][_taskId] = true;
+        uint32 prize = uint32(tasks[_taskId].prizerForDone);
         transferFrom(minter, performer, prize);
     }
 }

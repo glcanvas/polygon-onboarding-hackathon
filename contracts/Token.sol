@@ -18,8 +18,8 @@ contract Token is IERC20 {
     using SafeMath for uint256;
 
     constructor() {
-        balances[msg.sender] = totalSupply_;
-        minter = msg.sender; // Give the creator all initial tokens (100000 for example)
+        minter = msg.sender;
+        balances[minter] = totalSupply_;
     }
 
     function totalSupply() public view override returns (uint256) {
