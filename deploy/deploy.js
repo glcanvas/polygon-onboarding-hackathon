@@ -28,12 +28,20 @@ async function deployTasks(owner, provider, tokenAddress) {
     console.log("Balance after operation: " + await provider.getBalance(await owner.getAddress()));
 }
 
+async function deployNft(owner, provider, tokenAddress) {
+    const nftContract = (await hre.ethers.getContractFactory("RabbitsCollection")).connect(owner);
+    const nftDeployed = await nftContract.deploy(tokenAddress, this.config.nftDirPath);
+    console.log("NFT contract address: " + nftDeployed.address);
+    console.log("Balance after operation: " + await provider.getBalance(await owner.getAddress()));
+}
+
 async function deployAll() {
     let res = await initialize();
     let owner = res["owner"];
     let provider = res["provider"];
     let tokenAddress = await deployToken(owner, provider);
     await deployTasks(owner, provider, tokenAddress);
+    await deployNft(owner, provider, tokenAddress);
 }
 
 deployAll().then(() => process.exit(0))
