@@ -1,4 +1,4 @@
-const {ethers, expect} = require("./base");
+const {ethers, expect} = require("../scripts/base");
 const {BigNumber} = require("ethers");
 const {min} = require("mocha/lib/reporters");
 const {address} = require("hardhat/internal/core/config/config-validation");
