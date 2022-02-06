@@ -1,8 +1,4 @@
-const {ethers, expect} = require("../scripts/base");
-const {BigNumber} = require("ethers");
-const {min} = require("mocha/lib/reporters");
-const {address} = require("hardhat/internal/core/config/config-validation");
-
+const {ethers, expect} = require("./base");
 
 describe("Tasks", function () {
     let tasks;
@@ -37,7 +33,9 @@ describe("Tasks", function () {
         await token.approve(tasks.address, 1_000_000);
         await tasks.createTask("task1", 100);
 
-        await tasks.taskDone(await addr1.getAddress(), 0);
+
+        tasks = tasks.connect(addr1);
+        await tasks.taskDone(0);
         expect(await token.balanceOf(await addr1.getAddress())).to.be.eq(100);
     });
 
@@ -45,8 +43,11 @@ describe("Tasks", function () {
         const [o, addr1] = await ethers.getSigners();
         await token.approve(tasks.address, 1_000_000);
         await tasks.createTask("task1", 100);
+
         expect(await tasks.checkEligibility(await addr1.getAddress(), 0)).to.be.eq(false);
-        await tasks.taskDone(await addr1.getAddress(), 0);
+
+        tasks = tasks.connect(addr1);
+        await tasks.taskDone(0);
         expect(await tasks.checkEligibility(await addr1.getAddress(), 0)).to.be.eq(true);
     });
 
@@ -54,8 +55,10 @@ describe("Tasks", function () {
         const [o, addr1] = await ethers.getSigners();
         await token.approve(tasks.address, 1_000_000);
         await tasks.createTask("task1", 100);
-        await tasks.taskDone(await addr1.getAddress(), 0);
-        await expect(tasks.taskDone(await addr1.getAddress(), 0)).to.be.revertedWith("Task has been done");
+
+        tasks = tasks.connect(addr1);
+        await tasks.taskDone(0);
+        await expect(tasks.taskDone(0)).to.be.revertedWith("Task has been done");
     });
 
 });

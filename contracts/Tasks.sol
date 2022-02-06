@@ -33,12 +33,12 @@ contract Tasks is Ownable {
         return userDone[_address][_taskId];
     }
 
-    function taskDone(address _address, uint32 _taskId) public onlyOwner() {
+    function taskDone(uint32 _taskId) public {
         // check task finished, and check out of range
-        require(!checkEligibility(_address, _taskId), "Task has been done");
+        require(!checkEligibility(msg.sender, _taskId), "Task has been done");
         
-        userDone[_address][_taskId] = true;
+        userDone[msg.sender][_taskId] = true;
         uint32 prize = uint32(tasks[_taskId].rewardsSize);
-        _token.transferFrom(_token.owner(), _address, prize);
+        _token.transferFrom(_token.owner(), msg.sender, prize);
     }
 }
