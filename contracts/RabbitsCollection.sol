@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract RabbitsCollection is ERC721 {
@@ -8,16 +9,19 @@ contract RabbitsCollection is ERC721 {
 
     uint256 tokenOffset = 1; // due to transaction might fail lets start with 1
     uint256 constant maxCollectionSize = 840;
+    uint256 mintPrice = 1_000;
+    IERC20 immutable token;
+    string constant extension = ".png";
     string baseUrl;
 
-    string extension = ".png";
-
-    constructor (string memory _baseUrl) ERC721("Rabbits", "RBT") {
+    constructor (address _tokenAddress, string memory _baseUrl) ERC721("Rabbits", "RBT") {
         baseUrl = _baseUrl;
+        token = IERC20(_tokenAddress);
     }
 
     function mint() public {
         require(tokenOffset <= maxCollectionSize, "Collection already minted");
+        require(token.transferFrom(msg.sender, address(this), mintPrice), "Failed to transfer");
         ERC721._safeMint(msg.sender, tokenOffset); // because transaction may fail
         tokenOffset++;
     }
