@@ -60,7 +60,6 @@ function Home() {
     return (
         <div>
             <WalletBalance/>
-
             <div>
                 <button
                     onClick={() => {
@@ -131,15 +130,6 @@ function NFTImage({url, tokenId}) {
     }
 
     const mintToken = async () => {
-        // const connection = contract.connect(signer)
-        // const addr = connection.address
-        // const result = await contract.payToMint(addr, metadataURI, {
-        //   value: ethers.utils.parseEther('0.05'),
-        // })
-
-        // await result.wait()
-        // getMintedStatus()
-        // getCount()
         try {
             await contract.mint()
         } catch (error) {

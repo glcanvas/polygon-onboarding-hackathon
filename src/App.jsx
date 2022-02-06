@@ -5,15 +5,15 @@ import RabbitsCollection from './components/RabbitsCollection.json'
 import {useEffect, useState} from 'react'
 
 function App() {
-  if (window.ethereum) {
-    return (
-      <>
-        <Home />
-      </>
-    )
-  } else {
-    return <Install />
-  }
+    if (window.ethereum) {
+        return (
+            <>
+                <Home/>
+            </>
+        )
+    } else {
+        return <Install/>
+    }
 }
 
 export default App
