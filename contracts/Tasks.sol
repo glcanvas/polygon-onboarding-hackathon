@@ -1,40 +1,44 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "./Token.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "./OnboardToken.sol";
+import "./IOnboardToken.sol";
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+contract Tasks is Ownable {
 
-contract Tasks is Token, AccessControl {
-    bytes32 private adminRole = "admin";
+    IOnboardToken private immutable _token;
 
-    constructor() {}
+    constructor(address _tokeAddress) Ownable() {
+        _token = IOnboardToken(_tokeAddress);
+    }
 
     struct Task {
         string name;
-        uint32 prizerForDone;
-        bool done;
+        uint32 rewardsSize;
     }
 
-    Task[] public allTasks;
-    mapping(uint32 => Task) public tasks;
-    mapping(address => mapping(uint32 => bool)) public userDone;
+    mapping(uint32 => Task) private tasks;
+    mapping(address => mapping(uint32 => bool)) private userDone;
 
-    uint256 numberTask;
+    uint32 private taskId = 0;
 
-    function _createTask(string memory _name, uint32 prizerForDone) external {
-        allTasks.push(Task(_name, prizerForDone, false));
+    function createTask(string memory _name, uint32 _rewardsSize) public onlyOwner() {
+        tasks[taskId] = Task(_name, _rewardsSize);
+        taskId++;
     }
 
-    function taskDone(address performer, uint32 _taskId) external {
-        // our id blind with structs our Task
-        require(
-            userDone[msg.sender][_taskId] == false,
-            "You're done with this task!"
-        );
-        // turn into true which mean, that his done with this task
-        userDone[msg.sender][_taskId] = true;
-        uint32 prize = uint32(tasks[_taskId].prizerForDone);
-        transferFrom(minter, performer, prize);
+    function checkEligibility(address _address, uint32 _taskId) public view returns (bool){
+        require(_taskId < taskId, "_taskId out of range");
+        return userDone[_address][_taskId];
+    }
+
+    function taskDone(address _address, uint32 _taskId) public onlyOwner() {
+        // check task finished, and check out of range
+        require(!checkEligibility(_address, _taskId), "Task has been done");
+        
+        userDone[_address][_taskId] = true;
+        uint32 prize = uint32(tasks[_taskId].rewardsSize);
+        _token.transferFrom(_token.owner(), _address, prize);
     }
 }
